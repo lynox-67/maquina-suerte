@@ -1,145 +1,130 @@
---==============================
--- SERVICIOS
---==============================
+-- ================== SERVICES ==================
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
 
-local player = Players.LocalPlayer
-local PlayerGui = player:WaitForChild("PlayerGui")
+local Player = Players.LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
 
---==============================
--- CONFIG
---==============================
-local LOADING_TIME = 20 -- segundos pantalla verde
+-- ================== GREEN SCREEN ==================
+local GreenGui = Instance.new("ScreenGui", PlayerGui)
+GreenGui.Name = "GreenLoader"
+GreenGui.ResetOnSpawn = false
 
---==============================
--- LOADING SCREEN
---==============================
-local LoadingGui = Instance.new("ScreenGui")
-LoadingGui.Name = "HackerLoading"
-LoadingGui.ResetOnSpawn = false
-LoadingGui.Parent = PlayerGui
+local GreenFrame = Instance.new("Frame", GreenGui)
+GreenFrame.Size = UDim2.new(1,0,1,0)
+GreenFrame.BackgroundColor3 = Color3.fromRGB(0, 255, 120)
+GreenFrame.BorderSizePixel = 0
 
-local Background = Instance.new("Frame", LoadingGui)
-Background.Size = UDim2.new(1,0,1,0)
-Background.BackgroundColor3 = Color3.fromRGB(5,5,5)
+local LoaderText = Instance.new("TextLabel", GreenFrame)
+LoaderText.Size = UDim2.new(1,0,0,60)
+LoaderText.Position = UDim2.new(0,0,0.4,0)
+LoaderText.BackgroundTransparency = 1
+LoaderText.Font = Enum.Font.GothamBold
+LoaderText.TextSize = 26
+LoaderText.TextColor3 = Color3.fromRGB(0,0,0)
+LoaderText.Text = "Initializing Auto Moreira..."
 
-local Panel = Instance.new("Frame", Background)
-Panel.Size = UDim2.new(0,500,0,320)
-Panel.Position = UDim2.new(0.5,-250,0.5,-160)
-Panel.BackgroundColor3 = Color3.fromRGB(10,15,10)
-Panel.BorderSizePixel = 0
+local ReqText = Instance.new("TextLabel", GreenFrame)
+ReqText.Size = UDim2.new(1,0,0,50)
+ReqText.Position = UDim2.new(0,0,0.48,0)
+ReqText.BackgroundTransparency = 1
+ReqText.Font = Enum.Font.Gotham
+ReqText.TextSize = 18
+ReqText.TextColor3 = Color3.fromRGB(0,0,0)
+ReqText.Text = "You must have 3 brainrots (50+ value) or exclusive"
 
-local Stroke = Instance.new("UIStroke", Panel)
-Stroke.Color = Color3.fromRGB(0,255,120)
-Stroke.Thickness = 2
+local DiscordGreen = Instance.new("TextLabel", GreenFrame)
+DiscordGreen.Size = UDim2.new(1,0,0,40)
+DiscordGreen.Position = UDim2.new(0,0,0.9,0)
+DiscordGreen.BackgroundTransparency = 1
+DiscordGreen.Font = Enum.Font.GothamBold
+DiscordGreen.TextSize = 18
+DiscordGreen.TextColor3 = Color3.fromRGB(0,0,0)
+DiscordGreen.Text = "discord.gg/9KJ5UJQu"
 
-local Title = Instance.new("TextLabel", Panel)
-Title.Size = UDim2.new(1,0,0,40)
-Title.BackgroundTransparency = 1
-Title.Text = ">> EJECUTANDO SCRIPT <<"
-Title.Font = Enum.Font.Code
-Title.TextSize = 22
-Title.TextColor3 = Color3.fromRGB(0,255,120)
-
-local Req = Instance.new("TextLabel", Panel)
-Req.Size = UDim2.new(1,-20,0,50)
-Req.Position = UDim2.new(0,10,0,45)
-Req.BackgroundTransparency = 1
-Req.TextWrapped = true
-Req.Font = Enum.Font.Code
-Req.TextSize = 13
-Req.TextColor3 = Color3.fromRGB(0,200,100)
-Req.Text = "Debes tener brainrots arriba de 50 (mínimo 3) o ser EXCLUSIVO"
-
-local Discord = Instance.new("TextLabel", Panel)
-Discord.Size = UDim2.new(1,0,0,30)
-Discord.Position = UDim2.new(0,0,0,100)
-Discord.BackgroundTransparency = 1
-Discord.Font = Enum.Font.Code
-Discord.TextSize = 14
-Discord.TextColor3 = Color3.fromRGB(0,255,120)
-Discord.Text = "Discord: discord.gg/9KJ5UJQu"
-
-local BarBG = Instance.new("Frame", Panel)
-BarBG.Size = UDim2.new(0.9,0,0,10)
-BarBG.Position = UDim2.new(0.05,0,0.6,0)
-BarBG.BackgroundColor3 = Color3.fromRGB(30,60,30)
-BarBG.BorderSizePixel = 0
-
-local Bar = Instance.new("Frame", BarBG)
-Bar.Size = UDim2.new(1,0,1,0)
-Bar.BackgroundColor3 = Color3.fromRGB(0,255,120)
-Bar.BorderSizePixel = 0
-
-local TimeText = Instance.new("TextLabel", Panel)
-TimeText.Size = UDim2.new(1,0,0,30)
-TimeText.Position = UDim2.new(0,0,0.68,0)
-TimeText.BackgroundTransparency = 1
-TimeText.Font = Enum.Font.Code
-TimeText.TextSize = 14
-TimeText.TextColor3 = Color3.fromRGB(0,255,120)
-
---==============================
--- COUNTDOWN
---==============================
-for i = LOADING_TIME, 0, -1 do
-	TimeText.Text = "TIEMPO RESTANTE: "..i.."s"
-	Bar.Size = UDim2.new(i / LOADING_TIME, 0, 1, 0)
-	task.wait(1)
+for i = 20, 0, -1 do
+    LoaderText.Text = "Loading... "..i.."s"
+    task.wait(1)
 end
 
-LoadingGui:Destroy()
+GreenGui:Destroy()
 
---==============================
--- AUTO MOREIRA (SIMULACIÓN VISUAL)
---==============================
-local Gui = Instance.new("ScreenGui", PlayerGui)
-Gui.Name = "AutoMoreiraGUI"
-Gui.ResetOnSpawn = false
+-- ================== AUTO MOREIRA GUI ==================
+local speed = 20
+local output = 0.05
 
-local Main = Instance.new("Frame", Gui)
-Main.Size = UDim2.new(0,380,0,320)
-Main.Position = UDim2.new(0.05,0,0.25,0)
-Main.BackgroundColor3 = Color3.fromRGB(10,15,25)
-Main.Active = true
-Main.Draggable = true
+local ScreenGui = Instance.new("ScreenGui", PlayerGui)
+ScreenGui.Name = "AutoMoreiraGUI"
+ScreenGui.ResetOnSpawn = false
 
-Instance.new("UICorner", Main).CornerRadius = UDim.new(0,20)
+local MainFrame = Instance.new("Frame", ScreenGui)
+MainFrame.Size = UDim2.new(0,380,0,320)
+MainFrame.Position = UDim2.new(0.65,0,0.25,0)
+MainFrame.BackgroundColor3 = Color3.fromRGB(10,15,25)
+MainFrame.BackgroundTransparency = 0.15
+MainFrame.BorderSizePixel = 0
+MainFrame.Active = true
+MainFrame.Draggable = true
 
-local Title2 = Instance.new("TextLabel", Main)
-Title2.BackgroundTransparency = 1
-Title2.Position = UDim2.new(0,20,0,15)
-Title2.Size = UDim2.new(1,-40,0,30)
-Title2.Font = Enum.Font.GothamBold
-Title2.TextSize = 22
-Title2.TextColor3 = Color3.new(1,1,1)
-Title2.Text = "Método Auto Moreira"
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0,20)
+Instance.new("UIStroke", MainFrame).Color = Color3.fromRGB(40,50,70)
 
-local Status = Instance.new("TextLabel", Main)
-Status.BackgroundTransparency = 1
-Status.Position = UDim2.new(0,20,0,55)
-Status.Size = UDim2.new(1,-40,0,25)
-Status.Font = Enum.Font.Gotham
-Status.TextSize = 14
-Status.TextColor3 = Color3.fromRGB(150,255,150)
-Status.Text = "Conectando automáticamente..."
+local Title = Instance.new("TextLabel", MainFrame)
+Title.Size = UDim2.new(1,-50,0,32)
+Title.Position = UDim2.new(0,25,0,20)
+Title.BackgroundTransparency = 1
+Title.Font = Enum.Font.GothamBold
+Title.Text = "Auto Moreira Method"
+Title.TextSize = 22
+Title.TextColor3 = Color3.fromRGB(255,255,255)
+Title.TextXAlignment = Enum.TextXAlignment.Left
 
-local BarBG2 = Instance.new("Frame", Main)
-BarBG2.Size = UDim2.new(1,-40,0,6)
-BarBG2.Position = UDim2.new(0,20,0,90)
-BarBG2.BackgroundColor3 = Color3.fromRGB(40,40,60)
+local Creator = Instance.new("TextLabel", MainFrame)
+Creator.Size = UDim2.new(1,-50,0,18)
+Creator.Position = UDim2.new(0,25,0,52)
+Creator.BackgroundTransparency = 1
+Creator.Font = Enum.Font.Gotham
+Creator.Text = "Made By Rusk"
+Creator.TextSize = 13
+Creator.TextColor3 = Color3.fromRGB(130,140,160)
+Creator.TextXAlignment = Enum.TextXAlignment.Left
 
-local Bar2 = Instance.new("Frame", BarBG2)
-Bar2.Size = UDim2.new(0,0,1,0)
-Bar2.BackgroundColor3 = Color3.fromRGB(80,150,255)
+local StartButton = Instance.new("TextButton", MainFrame)
+StartButton.Size = UDim2.new(1,-50,0,45)
+StartButton.Position = UDim2.new(0,25,0,85)
+StartButton.BackgroundColor3 = Color3.fromRGB(50,130,255)
+StartButton.Text = "Start Auto Moreira"
+StartButton.Font = Enum.Font.GothamBold
+StartButton.TextSize = 16
+StartButton.TextColor3 = Color3.fromRGB(255,255,255)
+Instance.new("UICorner", StartButton).CornerRadius = UDim.new(0,12)
 
-TweenService:Create(
-	Bar2,
-	TweenInfo.new(25, Enum.EasingStyle.Linear),
-	{Size = UDim2.new(1,0,1,0)}
-):Play()
+local StatusLabel = Instance.new("TextLabel", MainFrame)
+StatusLabel.Size = UDim2.new(1,-50,0,20)
+StatusLabel.Position = UDim2.new(0,25,0,155)
+StatusLabel.BackgroundTransparency = 1
+StatusLabel.Font = Enum.Font.Gotham
+StatusLabel.Text = "Ready to start..."
+StatusLabel.TextSize = 13
+StatusLabel.TextColor3 = Color3.fromRGB(160,170,190)
+StatusLabel.TextXAlignment = Enum.TextXAlignment.Center
 
-task.wait(25)
-Status.Text = "¡Jugador unido con éxito!"
+-- Discord abajo
+local DiscordLabel = Instance.new("TextButton", MainFrame)
+DiscordLabel.Size = UDim2.new(1,-50,0,18)
+DiscordLabel.Position = UDim2.new(0,25,1,-22)
+DiscordLabel.BackgroundTransparency = 1
+DiscordLabel.Font = Enum.Font.GothamBold
+DiscordLabel.TextSize = 13
+DiscordLabel.TextColor3 = Color3.fromRGB(90,160,255)
+DiscordLabel.Text = "Discord: discord.gg/9KJ5UJQu"
+DiscordLabel.TextXAlignment = Enum.TextXAlignment.Center
+DiscordLabel.AutoButtonColor = false
 
+DiscordLabel.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard("https://discord.gg/9KJ5UJQu")
+        StatusLabel.Text = "Discord copied!"
+    end
+end)
